@@ -86,10 +86,10 @@ export default function Navbar() {
             ))}
 
             <SignedOut>
-              <SignInButton>
+              <SignInButton >
                 <button
                   onClick={() => setMobileOpen(false)}
-                  className="w-full px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-teal-400 text-white font-medium shadow-md hover:opacity-90 transition"
+                  className=" w-full px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-teal-400 text-white font-medium shadow-md hover:opacity-90 transition hover:cursor-pointer"
                 >
                   Sign In
                 </button>
