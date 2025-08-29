@@ -1,4 +1,6 @@
 import React from 'react'
+import { currentUser } from '@clerk/nextjs/server'
+import Guest from '@/components/Guest'
 
 export default function Home() {
   return (
