@@ -19,6 +19,7 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex-shrink-0">
+              <span className="sr-only">Sleep Monitor</span>
               <span className="text-xl sm:text-2xl font-extrabold bg-gradient-to-r from-blue-400 via-teal-400 to-green-400 bg-clip-text text-transparent">
                 Sleep Monitor
               </span>
@@ -27,18 +28,15 @@ export default function Navbar() {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center space-x-6">
-            <Link
-              href="/"
-              className="text-gray-300 hover:text-blue-400 transition text-base font-medium"
-            >
-              Home
-            </Link>
-            <Link
-              href="/about"
-              className="text-gray-300 hover:text-blue-400 transition text-base font-medium"
-            >
-              About
-            </Link>
+            {["Home", "About", "Contact"].map((item) => (
+              <Link
+                key={item}
+                href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+                className="text-gray-300 hover:text-blue-400 transition text-base font-medium"
+              >
+                {item}
+              </Link>
+            ))}
 
             <SignedOut>
               <SignInButton>
@@ -49,7 +47,7 @@ export default function Navbar() {
             </SignedOut>
 
             <SignedIn>
-              <UserButton 
+              <UserButton
                 afterSignOutUrl="/"
                 appearance={{
                   elements: {
@@ -74,22 +72,18 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="md:hidden bg-gray-900 border-t border-gray-700">
-          <div className="px-4 py-3 space-y-3">
-            <Link
-              href="/"
-              className="block text-gray-300 hover:text-blue-400 font-medium"
-              onClick={() => setMobileOpen(false)}
-            >
-              Home
-            </Link>
-            <Link
-              href="/about"
-              className="block text-gray-300 hover:text-blue-400 font-medium"
-              onClick={() => setMobileOpen(false)}
-            >
-              About
-            </Link>
+        <div className="md:hidden bg-gray-900 border-t border-gray-700 animate-slideDown">
+          <div className="px-4 py-4 space-y-4">
+            {["Home", "About", "Contact"].map((item) => (
+              <Link
+                key={item}
+                href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+                className="block text-gray-300 hover:text-blue-400 font-medium"
+                onClick={() => setMobileOpen(false)}
+              >
+                {item}
+              </Link>
+            ))}
 
             <SignedOut>
               <SignInButton>
@@ -104,7 +98,7 @@ export default function Navbar() {
 
             <SignedIn>
               <div className="pt-2">
-                <UserButton 
+                <UserButton
                   afterSignOutUrl="/"
                   appearance={{
                     elements: {
@@ -117,34 +111,39 @@ export default function Navbar() {
           </div>
         </div>
       )}
-      
+
+      {/* Clerk dark mode overrides */}
       <style jsx global>{`
-        /* Customize Clerk UserButton to match dark theme */
-        .cl-userButtonBox {
-          display: flex;
-          align-items: center;
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-5%);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
-        
+        .animate-slideDown {
+          animation: slideDown 0.25s ease-out;
+        }
+
         .cl-userButtonTrigger {
-          background-color: transparent;
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          background-color: transparent !important;
+          border: 1px solid rgba(255, 255, 255, 0.15) !important;
         }
-        
         .cl-userButtonPopoverCard {
-          background-color: #1f2937;
-          border: 1px solid #374151;
+          background-color: #1f2937 !important;
+          border: 1px solid #374151 !important;
         }
-        
         .cl-userButtonPopoverActionButton {
-          color: #f3f4f6;
+          color: #f3f4f6 !important;
         }
-        
         .cl-userButtonPopoverActionButton:hover {
-          background-color: #374151;
+          background-color: #374151 !important;
         }
-        
         .cl-userButtonPopoverFooter {
-          display: none;
+          display: none !important;
         }
       `}</style>
     </nav>
