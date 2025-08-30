@@ -8,96 +8,121 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import { Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Animation variants
+  const menuItem = {
+    hidden: { opacity: 0, y: -10 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } }
+  };
+
+  const mobileMenu = {
+    hidden: { opacity: 0, height: 0 },
+    visible: { 
+      opacity: 1, 
+      height: "auto",
+      transition: {
+        duration: 0.3,
+        staggerChildren: 0.1
+      }
+    },
+    exit: { 
+      opacity: 0, 
+      height: 0,
+      transition: {
+        duration: 0.2
+      }
+    }
+  };
+
+  const logoAnimation = {
+    hidden: { opacity: 0, x: -20 },
+    visible: { 
+      opacity: 1, 
+      x: 0,
+      transition: { duration: 0.5 }
+    }
+  };
+
+  const buttonAnimation = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: { 
+      opacity: 1, 
+      scale: 1,
+      transition: { duration: 0.4 }
+    },
+    hover: { scale: 1.05 },
+    tap: { scale: 0.95 }
+  };
 
   return (
     <nav className="bg-gray-900 border-b border-gray-700 fixed w-full z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center">
+          <motion.div 
+            initial="hidden"
+            animate="visible"
+            variants={logoAnimation}
+            className="flex items-center"
+          >
             <Link href="/" className="flex-shrink-0">
               <span className="sr-only">Sleep Monitor</span>
-              <span className="text-xl sm:text-2xl font-extrabold bg-gradient-to-r from-blue-400 via-teal-400 to-green-400 bg-clip-text text-transparent">
+              <motion.span 
+                whileHover={{ scale: 1.05 }}
+                className="text-xl sm:text-2xl font-extrabold bg-gradient-to-r from-blue-400 via-teal-400 to-green-400 bg-clip-text text-transparent"
+              >
                 Sleep Monitor
-              </span>
+              </motion.span>
             </Link>
-          </div>
+          </motion.div>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center space-x-6">
+          <motion.div 
+            initial="hidden"
+            animate="visible"
+            transition={{ staggerChildren: 0.1 }}
+            className="hidden md:flex items-center space-x-6"
+          >
             {["Home", "About", "Contact"].map((item) => (
-              <Link
+              <motion.div
                 key={item}
-                href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
-                className="text-gray-300 hover:text-blue-400 transition text-base font-medium"
+                variants={menuItem}
+                whileHover={{ y: -2 }}
+                whileTap={{ y: 0 }}
               >
-                {item}
-              </Link>
-            ))}
-
-            <SignedOut>
-              <SignInButton>
-                <button className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-teal-400 text-white font-medium shadow-md hover:opacity-90 transition">
-                  Sign In
-                </button>
-              </SignInButton>
-            </SignedOut>
-
-            <SignedIn>
-              <UserButton
-                afterSignOutUrl="/"
-                appearance={{
-                  elements: {
-                    userButtonAvatarBox: "w-8 h-8",
-                  },
-                }}
-              />
-            </SignedIn>
-          </div>
-
-          {/* Mobile Hamburger */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="p-2 rounded-md text-gray-300 hover:bg-gray-800 focus:outline-none"
-            >
-              {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Menu */}
-      {mobileOpen && (
-        <div className="md:hidden bg-gray-900 border-t border-gray-700 animate-slideDown">
-          <div className="px-4 py-4 space-y-4">
-            {["Home", "About", "Contact"].map((item) => (
-              <Link
-                key={item}
-                href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
-                className="block text-gray-300 hover:text-blue-400 font-medium"
-                onClick={() => setMobileOpen(false)}
-              >
-                {item}
-              </Link>
-            ))}
-
-            <SignedOut>
-              <SignInButton >
-                <button
-                  onClick={() => setMobileOpen(false)}
-                  className=" w-full px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-teal-400 text-white font-medium shadow-md hover:opacity-90 transition hover:cursor-pointer"
+                <Link
+                  href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+                  className="text-gray-300 hover:text-blue-400 transition text-base font-medium"
                 >
-                  Sign In
-                </button>
-              </SignInButton>
+                  {item}
+                </Link>
+              </motion.div>
+            ))}
+
+            <SignedOut>
+              <motion.div
+                variants={buttonAnimation}
+                whileHover="hover"
+                whileTap="tap"
+              >
+                <SignInButton>
+                  <button className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-teal-400 text-white font-medium shadow-md hover:opacity-90 transition">
+                    Sign In
+                  </button>
+                </SignInButton>
+              </motion.div>
             </SignedOut>
 
             <SignedIn>
-              <div className="pt-2">
+              <motion.div
+                variants={menuItem}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <UserButton
                   afterSignOutUrl="/"
                   appearance={{
@@ -106,28 +131,93 @@ export default function Navbar() {
                     },
                   }}
                 />
-              </div>
+              </motion.div>
             </SignedIn>
-          </div>
+          </motion.div>
+
+          {/* Mobile Hamburger */}
+          <motion.div 
+            className="md:hidden"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="p-2 rounded-md text-gray-300 hover:bg-gray-800 focus:outline-none"
+            >
+              {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </motion.div>
         </div>
-      )}
+      </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div 
+            variants={mobileMenu}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="md:hidden bg-gray-900 border-t border-gray-700 overflow-hidden"
+          >
+            <motion.div className="px-4 py-4 space-y-4">
+              {["Home", "About", "Contact"].map((item) => (
+                <motion.div
+                  key={item}
+                  variants={menuItem}
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <Link
+                    href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+                    className="block text-gray-300 hover:text-blue-400 font-medium"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    {item}
+                  </Link>
+                </motion.div>
+              ))}
+
+              <SignedOut>
+                <motion.div
+                  variants={menuItem}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <SignInButton >
+                    <button
+                      onClick={() => setMobileOpen(false)}
+                      className="w-full px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-teal-400 text-white font-medium shadow-md hover:opacity-90 transition hover:cursor-pointer"
+                    >
+                      Sign In
+                    </button>
+                  </SignInButton>
+                </motion.div>
+              </SignedOut>
+
+              <SignedIn>
+                <motion.div 
+                  variants={menuItem}
+                  className="pt-2"
+                >
+                  <UserButton
+                    afterSignOutUrl="/"
+                    appearance={{
+                      elements: {
+                        userButtonAvatarBox: "w-8 h-8",
+                      },
+                    }}
+                  />
+                </motion.div>
+              </SignedIn>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Clerk dark mode overrides */}
       <style jsx global>{`
-        @keyframes slideDown {
-          from {
-            opacity: 0;
-            transform: translateY(-5%);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-slideDown {
-          animation: slideDown 0.25s ease-out;
-        }
-
         .cl-userButtonTrigger {
           background-color: transparent !important;
           border: 1px solid rgba(255, 255, 255, 0.15) !important;
