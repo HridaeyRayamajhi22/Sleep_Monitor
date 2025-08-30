@@ -2,27 +2,29 @@
 
 import { SignInButton } from "@clerk/nextjs";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-const images = [
-  "/sleep.png", // replace with your real images
-  "/sleep-tracker.png",
-  "/sleep1.png",
-];
+const images = ["/sleep.png", "/sleep-tracker.png", "/sleep1.png"];
 
 const Guest = () => {
   const [current, setCurrent] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    intervalRef.current = setInterval(() => {
       setIsTransitioning(true);
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         setCurrent((prev) => (prev + 1) % images.length);
         setIsTransitioning(false);
-      }, 500); // Match the transition duration
-    }, 5000); // 5 sec rotation
-    return () => clearInterval(interval);
+      }, 300);
+    }, 5000);
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
   }, []);
 
   return (
@@ -45,44 +47,41 @@ const Guest = () => {
         </div>
 
         {/* Slideshow */}
-        <div className="flex-1 flex justify-center relative">
-          <div className="w-full max-w-3xl h-[400px] relative overflow-hidden rounded-2xl shadow-lg border border-gray-700">
-            {images.map((src, index) => (
-              <div
-                key={src}
-                className={`absolute inset-0 transition-opacity duration-500 ${
-                  index === current ? "opacity-100" : "opacity-0"
-                }`}
-              >
-                <Image
-                  src={src}
-                  alt="Sleep Tracker"
-                  fill
-                  className="object-cover"
-                  priority={index === 0}
-                />
-              </div>
-            ))}
-          </div>
+        <div className="flex-1 w-full flex justify-center">
+          <div className="relative w-full max-w-3xl aspect-[16/9] rounded-2xl shadow-lg border border-gray-700 overflow-hidden">
+            <Image
+              key={current}
+              src={images[current]}
+              alt={`Sleep Monitor slide ${current + 1}`}
+              fill
+              className={`object-cover transition-opacity duration-300 ${
+                isTransitioning ? "opacity-0" : "opacity-100"
+              }`}
+              priority={current === 0}
+            />
 
-          {/* Dots indicator */}
-          <div className="absolute bottom-4 flex space-x-2">
-            {images.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  setIsTransitioning(true);
-                  setTimeout(() => {
-                    setCurrent(index);
-                    setIsTransitioning(false);
-                  }, 100);
-                }}
-                className={`w-3 h-3 rounded-full transition-colors ${
-                  index === current ? "bg-teal-400" : "bg-gray-500 hover:bg-gray-400"
-                }`}
-                aria-label={`View image ${index + 1}`}
-              />
-            ))}
+            {/* Dots */}
+            <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-2">
+              {images.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    setIsTransitioning(true);
+                    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+                    timeoutRef.current = setTimeout(() => {
+                      setCurrent(index);
+                      setIsTransitioning(false);
+                    }, 150);
+                  }}
+                  className={`w-3 h-3 rounded-full transition-colors ${
+                    index === current
+                      ? "bg-teal-400"
+                      : "bg-gray-500 hover:bg-gray-400"
+                  }`}
+                  aria-label={`View image ${index + 1}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -126,7 +125,7 @@ const Guest = () => {
         </div>
       </section>
 
-      {/* Testimonials Section */}
+      {/* Testimonials */}
       <section className="py-20 px-6 sm:px-10 lg:px-20 bg-gray-800 border-t border-gray-700">
         <h2 className="text-3xl font-bold text-center mb-12 text-teal-400">
           What Our Users Say
