@@ -1,16 +1,84 @@
 'use client';
 
 import { SignUp } from '@clerk/nextjs';
+import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
 export default function Page() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Animation variants
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+  };
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const scaleIn = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } }
+  };
+
+  const slideInLeft = {
+    hidden: { opacity: 0, x: -30 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.7 } }
+  };
+
+  if (!mounted) {
+    return (
+      <div className="signUpContainer">
+        <div className="signUpWrapper">
+          <div className="signUpCard">
+            <div className="loadingSpinner"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="signUpContainer">
       <div className="signUpWrapper">
-        <div className="signUpHeader">
-          <h1>Create Your Account</h1>
-          <p>Sign up to get started with our service</p>
-        </div>
-        <div className="signUpCard">
+        {/* Header with animation */}
+        <motion.div 
+          initial="hidden"
+          animate="visible"
+          variants={fadeInUp}
+          className="signUpHeader"
+        >
+          <motion.h1
+            variants={fadeInUp}
+          >
+            Create Your Account
+          </motion.h1>
+          <motion.p
+            variants={fadeInUp}
+            transition={{ delay: 0.1 }}
+          >
+            Sign up to get started with our service
+          </motion.p>
+        </motion.div>
+
+        {/* SignUp card with animation */}
+        <motion.div 
+          initial="hidden"
+          animate="visible"
+          variants={scaleIn}
+          className="signUpCard"
+        >
           <SignUp
             appearance={{
               elements: {
@@ -31,8 +99,36 @@ export default function Page() {
               }
             }}
           />
-        </div>
+        </motion.div>
       </div>
+
+      {/* Background animation elements */}
+      <div className="backgroundAnimation">
+        {[...Array(5)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="floatingOrb"
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ 
+              opacity: [0, 0.3, 0],
+              scale: [0, 1, 0],
+            }}
+            transition={{
+              duration: 4 + i,
+              repeat: Infinity,
+              delay: i * 0.5,
+              ease: "easeInOut"
+            }}
+            style={{
+              left: `${20 + i * 15}%`,
+              background: i % 2 === 0 
+                ? 'radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%)' 
+                : 'radial-gradient(circle, rgba(124, 58, 237, 0.2) 0%, transparent 70%)'
+            }}
+          />
+        ))}
+      </div>
+
       <style jsx global>{`
         /* Global styles */
         body {
@@ -42,6 +138,7 @@ export default function Page() {
           background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
           min-height: 100vh;
           color: #f8fafc;
+          overflow-x: hidden;
         }
 
         /* Container styles */
@@ -51,12 +148,15 @@ export default function Page() {
           justify-content: center;
           min-height: 100vh;
           padding: 20px;
+          position: relative;
         }
 
         .signUpWrapper {
           width: 100%;
           max-width: 450px;
           text-align: center;
+          position: relative;
+          z-index: 2;
         }
 
         /* Header styles */
@@ -87,6 +187,7 @@ export default function Page() {
           overflow: hidden;
           padding: 0;
           border: 1px solid #334155;
+          transform-origin: center;
         }
 
         /* Clerk component customization */
@@ -98,6 +199,7 @@ export default function Page() {
           box-shadow: none;
           border-radius: 16px;
           background: #1e293b;
+          animation: cardGlow 3s ease-in-out infinite alternate;
         }
 
         .signUpHeaderTitle {
@@ -118,10 +220,11 @@ export default function Page() {
           color: #e2e8f0;
           transition: all 0.3s ease;
           margin-bottom: 10px;
+          transform-origin: center;
         }
 
         .socialButton:hover {
-          transform: translateY(-2px);
+          transform: translateY(-2px) scale(1.02);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
           background: #334155;
         }
@@ -134,10 +237,11 @@ export default function Page() {
           font-weight: 600;
           transition: all 0.3s ease;
           color: white;
+          transform-origin: center;
         }
 
         .primaryButton:hover {
-          transform: translateY(-2px);
+          transform: translateY(-2px) scale(1.02);
           box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
           background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
         }
@@ -167,15 +271,17 @@ export default function Page() {
           border-radius: 8px;
           border: 1px solid #334155;
           padding: 12px 16px;
-          transition: border-color 0.3s ease;
+          transition: all 0.3s ease;
           background: #374151;
           color: #f9fafb;
+          transform-origin: center;
         }
 
         .cl-formFieldInput:focus {
           border-color: #8b5cf6;
           box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
           outline: none;
+          transform: scale(1.02);
         }
 
         .cl-formFieldLabel {
@@ -187,16 +293,81 @@ export default function Page() {
           background: #374151;
           color: #f9fafb;
           border: 1px solid #334155;
+          transition: all 0.3s ease;
+        }
+
+        .cl-otpCodeFieldInput:focus {
+          border-color: #8b5cf6;
+          box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+          transform: scale(1.05);
         }
 
         /* Password strength meter */
         .cl-passwordStrength {
           background: #374151;
           border-radius: 4px;
+          overflow: hidden;
         }
 
         .cl-passwordStrengthBar {
           background: linear-gradient(to right, #8b5cf6, #7c3aed);
+          height: 4px;
+          transition: width 0.5s ease;
+        }
+
+        /* Loading spinner */
+        .loadingSpinner {
+          width: 40px;
+          height: 40px;
+          border: 3px solid rgba(139, 92, 246, 0.3);
+          border-radius: 50%;
+          border-top-color: #8b5cf6;
+          animation: spin 1s ease-in-out infinite;
+          margin: 2rem auto;
+        }
+
+        /* Background animation */
+        .backgroundAnimation {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 1;
+          pointer-events: none;
+        }
+
+        .floatingOrb {
+          position: absolute;
+          width: 200px;
+          height: 200px;
+          border-radius: 50%;
+          filter: blur(40px);
+        }
+
+        /* Keyframes */
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+
+        @keyframes cardGlow {
+          0% {
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+          }
+          100% {
+            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.2);
+          }
+        }
+
+        /* Password strength animation */
+        @keyframes strengthPulse {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.05); }
+          100% { transform: scale(1); }
+        }
+
+        .cl-passwordStrengthBar[style*="width: 100%"] {
+          animation: strengthPulse 2s infinite;
         }
 
         /* Responsive design */
@@ -216,6 +387,11 @@ export default function Page() {
           .signUpWrapper {
             max-width: 400px;
           }
+
+          .floatingOrb {
+            width: 150px;
+            height: 150px;
+          }
         }
 
         @media (max-width: 480px) {
@@ -233,6 +409,11 @@ export default function Page() {
           
           .signUpWrapper {
             max-width: 100%;
+          }
+
+          .floatingOrb {
+            width: 120px;
+            height: 120px;
           }
         }
       `}</style>

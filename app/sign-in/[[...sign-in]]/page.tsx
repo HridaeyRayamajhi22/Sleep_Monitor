@@ -17,24 +17,9 @@ export default function Page() {
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
   };
 
-  const staggerContainer = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
-
   const scaleIn = {
     hidden: { opacity: 0, scale: 0.9 },
     visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } }
-  };
-
-  const slideInLeft = {
-    hidden: { opacity: 0, x: -30 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.7 } }
   };
 
   if (!mounted) {
@@ -52,34 +37,20 @@ export default function Page() {
   return (
     <div className="signInContainer">
       <div className="signInWrapper">
-        {/* Header with animation */}
-        <motion.div 
-          initial="hidden"
-          animate="visible"
-          variants={fadeInUp}
-          className="signInHeader"
-        >
-          <motion.h1
-            variants={fadeInUp}
-          >
-            Welcome Back
-          </motion.h1>
-          <motion.p
-            variants={fadeInUp}
-            transition={{ delay: 0.1 }}
-          >
+        {/* Header */}
+        <motion.div initial="hidden" animate="visible" variants={fadeInUp} className="signInHeader">
+          <motion.h1 variants={fadeInUp}>Welcome Back</motion.h1>
+          <motion.p variants={fadeInUp} transition={{ delay: 0.1 }}>
             Sign in to continue to your account
           </motion.p>
         </motion.div>
 
-        {/* SignIn card with animation */}
-        <motion.div 
-          initial="hidden"
-          animate="visible"
-          variants={scaleIn}
-          className="signInCard"
-        >
-          <SignIn 
+        {/* SignIn Card */}
+        <motion.div initial="hidden" animate="visible" variants={scaleIn} className="signInCard">
+          <SignIn
+            path="/sign-in"
+            routing="path"
+            signUpUrl="/sign-up" // <-- Enables Sign Up link
             appearance={{
               elements: {
                 rootBox: 'signInRoot',
@@ -102,17 +73,14 @@ export default function Page() {
         </motion.div>
       </div>
 
-      {/* Background animation elements */}
+      {/* Floating background orbs */}
       <div className="backgroundAnimation">
         {[...Array(5)].map((_, i) => (
           <motion.div
             key={i}
             className="floatingOrb"
             initial={{ opacity: 0, scale: 0 }}
-            animate={{ 
-              opacity: [0, 0.3, 0],
-              scale: [0, 1, 0],
-            }}
+            animate={{ opacity: [0, 0.3, 0], scale: [0, 1, 0] }}
             transition={{
               duration: 4 + i,
               repeat: Infinity,
@@ -121,16 +89,16 @@ export default function Page() {
             }}
             style={{
               left: `${20 + i * 15}%`,
-              background: i % 2 === 0 
-                ? 'radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%)' 
+              background: i % 2 === 0
+                ? 'radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%)'
                 : 'radial-gradient(circle, rgba(124, 58, 237, 0.2) 0%, transparent 70%)'
             }}
           />
         ))}
       </div>
 
+      {/* Global Styles */}
       <style jsx global>{`
-        /* Global styles */
         body {
           margin: 0;
           padding: 0;
@@ -141,7 +109,6 @@ export default function Page() {
           overflow-x: hidden;
         }
 
-        /* Container styles */
         .signInContainer {
           display: flex;
           align-items: center;
@@ -159,7 +126,6 @@ export default function Page() {
           z-index: 2;
         }
 
-        /* Header styles */
         .signInHeader {
           margin-bottom: 30px;
         }
@@ -179,7 +145,6 @@ export default function Page() {
           color: #cbd5e1;
         }
 
-        /* Card styles */
         .signInCard {
           background: #1e293b;
           border-radius: 16px;
@@ -187,32 +152,18 @@ export default function Page() {
           overflow: hidden;
           padding: 0;
           border: 1px solid #334155;
-          transform-origin: center;
         }
 
-        /* Clerk component customization */
-        .signInRoot {
-          width: 100%;
-        }
-
+        .signInRoot { width: 100%; }
         .signInCardInner {
           box-shadow: none;
           border-radius: 16px;
           background: #1e293b;
-          animation: cardGlow 3s ease-in-out infinite alternate;
+          padding: 2rem;
         }
 
-        .signInHeaderTitle {
-          font-size: 1.5rem;
-          font-weight: 700;
-          color: #e2e8f0;
-        }
-
-        .signInHeaderSubtitle {
-          color: #94a3b8;
-          margin-bottom: 1.5rem;
-        }
-
+        .signInHeaderTitle { font-size: 1.5rem; font-weight: 700; color: #e2e8f0; }
+        .signInHeaderSubtitle { color: #94a3b8; margin-bottom: 1.5rem; }
         .socialButton {
           border-radius: 8px;
           border: 1px solid #334155;
@@ -220,9 +171,7 @@ export default function Page() {
           color: #e2e8f0;
           transition: all 0.3s ease;
           margin-bottom: 10px;
-          transform-origin: center;
         }
-
         .socialButton:hover {
           transform: translateY(-2px) scale(1.02);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -237,9 +186,7 @@ export default function Page() {
           font-weight: 600;
           transition: all 0.3s ease;
           color: white;
-          transform-origin: center;
         }
-
         .primaryButton:hover {
           transform: translateY(-2px) scale(1.02);
           box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
@@ -251,58 +198,8 @@ export default function Page() {
           font-weight: 600;
           transition: color 0.3s ease;
         }
+        .footerLink:hover { color: #a78bfa; }
 
-        .footerLink:hover {
-          color: #a78bfa;
-        }
-
-        /* Divider styling */
-        .cl-dividerLine {
-          background: #334155;
-        }
-
-        .cl-dividerText {
-          color: #94a3b8;
-          font-size: 0.9rem;
-        }
-
-        /* Form field styling */
-        .cl-formFieldInput {
-          border-radius: 8px;
-          border: 1px solid #334155;
-          padding: 12px 16px;
-          transition: all 0.3s ease;
-          background: #374151;
-          color: #f9fafb;
-          transform-origin: center;
-        }
-
-        .cl-formFieldInput:focus {
-          border-color: #8b5cf6;
-          box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
-          outline: none;
-          transform: scale(1.02);
-        }
-
-        .cl-formFieldLabel {
-          color: #cbd5e1;
-        }
-
-        /* OTP input styling */
-        .cl-otpCodeFieldInput {
-          background: #374151;
-          color: #f9fafb;
-          border: 1px solid #334155;
-          transition: all 0.3s ease;
-        }
-
-        .cl-otpCodeFieldInput:focus {
-          border-color: #8b5cf6;
-          box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
-          transform: scale(1.05);
-        }
-
-        /* Loading spinner */
         .loadingSpinner {
           width: 40px;
           height: 40px;
@@ -313,7 +210,6 @@ export default function Page() {
           margin: 2rem auto;
         }
 
-        /* Background animation */
         .backgroundAnimation {
           position: fixed;
           top: 0;
@@ -323,7 +219,6 @@ export default function Page() {
           z-index: 1;
           pointer-events: none;
         }
-
         .floatingOrb {
           position: absolute;
           width: 200px;
@@ -332,58 +227,7 @@ export default function Page() {
           filter: blur(40px);
         }
 
-        /* Keyframes */
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-
-        @keyframes cardGlow {
-          0% {
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-          }
-          100% {
-            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.2);
-          }
-        }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-          .signInHeader h1 {
-            font-size: 2rem;
-          }
-          
-          .signInHeader p {
-            font-size: 1rem;
-          }
-          
-          .signInCardInner {
-            padding: 1.5rem;
-          }
-
-          .floatingOrb {
-            width: 150px;
-            height: 150px;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .signInContainer {
-            padding: 10px;
-          }
-          
-          .signInHeader h1 {
-            font-size: 1.75rem;
-          }
-          
-          .signInCardInner {
-            padding: 1.25rem;
-          }
-
-          .floatingOrb {
-            width: 120px;
-            height: 120px;
-          }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
       `}</style>
     </div>
   );
