@@ -7,27 +7,35 @@ import { useEffect, useState } from 'react';
 export default function Page() {
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => setMounted(true), []);
-
-  if (!mounted) return null;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Simple fade-in animation
   const fadeIn = {
-    hidden: { opacity: 0, y: 10 },
+    hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
   };
 
+  if (!mounted) {
+    return (
+      <div className="signUpContainer pt-24">
+        <div className="loadingSpinner"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="signUpContainer">
+    <div className="signUpContainer pt-24">
       <div className="signUpWrapper">
         {/* Header */}
-        <motion.div initial="hidden" animate="visible" variants={fadeIn} className="signUpHeader">
-          <h1>Create Your Account</h1>
-          <p>Sign up to get started with our service</p>
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} className="signUpHeader mb-8 mt-12">
+          <h1 className="text-4xl font-bold text-white mb-2">Create Your Account</h1>
+          <p className="text-gray-300">Sign up to get started with our service</p>
         </motion.div>
 
-        {/* SignUp card */}
-        <motion.div initial="hidden" animate="visible" variants={fadeIn} className="signUpCard">
+        {/* SignUp Card */}
+        <motion.div initial="hidden" animate="visible" variants={fadeIn}>
           <SignUp
             appearance={{
               elements: {
@@ -35,6 +43,7 @@ export default function Page() {
                 cardBox: 'signUpCardInner',
                 headerTitle: 'signUpHeaderTitle',
                 headerSubtitle: 'signUpHeaderSubtitle',
+                socialButtonsBlockButton: 'socialButton',
                 formButtonPrimary: 'primaryButton',
                 footerActionLink: 'footerLink',
               },
@@ -42,6 +51,7 @@ export default function Page() {
                 colorPrimary: '#8b5cf6',
                 colorBackground: '#1f2937',
                 colorText: '#f9fafb',
+                colorInputText: '#f9fafb',
                 colorInputBackground: '#374151',
               }
             }}
@@ -49,59 +59,53 @@ export default function Page() {
         </motion.div>
       </div>
 
+      {/* Styles */}
       <style jsx global>{`
         body {
           margin: 0;
           padding: 0;
           font-family: system-ui, sans-serif;
-          background: #1e293b;
+          background: linear-gradient(135deg, #0f172a, #1e293b);
           min-height: 100vh;
           color: #f8fafc;
         }
 
         .signUpContainer {
           display: flex;
-          align-items: center;
+          align-items: start;
           justify-content: center;
-          min-height: 100vh;
-          padding: 20px;
+          min-height: calc(100vh - 64px);
+          padding: 2rem 1rem;
+          position: relative;
         }
 
         .signUpWrapper {
           width: 100%;
-          max-width: 420px;
+          max-width: 450px;
           text-align: center;
-        }
-
-        .signUpHeader {
-          margin-bottom: 25px;
+          z-index: 2;
         }
 
         .signUpHeader h1 {
-          font-size: 2rem;
+          font-size: 2.5rem;
           font-weight: 700;
-          margin-bottom: 8px;
-          background: linear-gradient(to right, #e2e8f0, #94a3b8);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
+          margin-bottom: 0.5rem;
+          color: #ffffff;
         }
 
         .signUpHeader p {
-          font-size: 1rem;
-          opacity: 0.8;
+          font-size: 1.1rem;
           color: #cbd5e1;
         }
 
-        .signUpCard {
-          background: #1e293b;
-          border-radius: 12px;
-          box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-          overflow: hidden;
-          border: 1px solid #334155;
+        .signUpCardInner {
+          border-radius: 16px;
+          background: #1e2937;
+          box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
 
         .primaryButton {
-          background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+          background: linear-gradient(135deg, #8b5cf6, #7c3aed);
           border-radius: 8px;
           border: none;
           padding: 12px 24px;
@@ -111,14 +115,58 @@ export default function Page() {
         }
 
         .primaryButton:hover {
-          background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(139,92,246,0.4);
+          transform: scale(1.02);
+        }
+
+        .socialButton {
+          border-radius: 8px;
+          border: 1px solid #334155;
+          background: #1e2937;
+          color: #e2e8f0;
+          margin-bottom: 10px;
+          transition: all 0.3s ease;
+        }
+
+        .socialButton:hover {
+          background: #334155;
+          transform: translateY(-2px) scale(1.02);
+        }
+
+        .footerLink {
+          color: #8b5cf6;
+          font-weight: 600;
+        }
+
+        .footerLink:hover {
+          color: #a78bfa;
+        }
+
+        .loadingSpinner {
+          width: 40px;
+          height: 40px;
+          border: 3px solid rgba(139, 92, 246, 0.3);
+          border-radius: 50%;
+          border-top-color: #8b5cf6;
+          animation: spin 1s linear infinite;
+          margin: 5rem auto;
+        }
+
+        @keyframes spin {
+          to { transform: rotate(360deg); }
         }
 
         @media (max-width: 480px) {
-          .signUpHeader h1 { font-size: 1.5rem; }
-          .signUpWrapper { max-width: 100%; }
+          .signUpWrapper {
+            max-width: 100%;
+          }
+
+          .signUpHeader h1 {
+            font-size: 1.75rem;
+          }
+
+          .signUpHeader p {
+            font-size: 1rem;
+          }
         }
       `}</style>
     </div>
