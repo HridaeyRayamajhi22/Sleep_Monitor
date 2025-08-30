@@ -29,9 +29,18 @@ const AddNewRecord = () => {
       setAmount(6)
       setSleepQuality('')
     }
+    setIsLoading(false)
   }
   return (
-    <div>
+    <div className=''>
+      <div className=''>
+        <h3>Track your sleep</h3>
+        <form ref={formRef} onSubmit={(e) => {
+          e.preventDefault()
+          const formData = new FormData(formRef.current!)
+          clientAction(formData)
+        }}></form>
+      </div>
 
     </div>
   )
