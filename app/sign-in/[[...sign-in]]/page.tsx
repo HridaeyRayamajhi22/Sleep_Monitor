@@ -3,13 +3,14 @@
 import { SignIn } from '@clerk/nextjs';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 export default function Page() {
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => setMounted(true), []);
+
+  if (!mounted) return null;
 
   // Animation variants
   const fadeInUp = {
@@ -22,42 +23,27 @@ export default function Page() {
     visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } }
   };
 
-  if (!mounted) {
-    return (
-      <div className="signInContainer">
-        <div className="signInWrapper">
-          <div className="signInCard">
-            <div className="loadingSpinner"></div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="signInContainer">
       <div className="signInWrapper">
         {/* Header */}
         <motion.div initial="hidden" animate="visible" variants={fadeInUp} className="signInHeader">
-          <motion.h1 variants={fadeInUp}>Welcome Back</motion.h1>
-          <motion.p variants={fadeInUp} transition={{ delay: 0.1 }}>
-            Sign in to continue to your account
-          </motion.p>
+          <h1>Welcome Back</h1>
+          <p>Sign in to continue to your account</p>
         </motion.div>
 
-        {/* SignIn Card */}
+        {/* SignIn card */}
         <motion.div initial="hidden" animate="visible" variants={scaleIn} className="signInCard">
           <SignIn
             path="/sign-in"
-            routing="path"
-            signUpUrl="/sign-up" // <-- Enables Sign Up link
+            routing="path"       // required for signUpUrl
+            signUpUrl="/sign-up" // points to your sign up page
             appearance={{
               elements: {
                 rootBox: 'signInRoot',
                 cardBox: 'signInCardInner',
                 headerTitle: 'signInHeaderTitle',
                 headerSubtitle: 'signInHeaderSubtitle',
-                socialButtonsBlockButton: 'socialButton',
                 formButtonPrimary: 'primaryButton',
                 footerActionLink: 'footerLink',
               },
@@ -65,22 +51,32 @@ export default function Page() {
                 colorPrimary: '#8b5cf6',
                 colorBackground: '#1f2937',
                 colorText: '#f9fafb',
-                colorInputText: '#f9fafb',
                 colorInputBackground: '#374151',
               }
             }}
           />
         </motion.div>
+
+        {/* Fallback Sign Up link */}
+        <div className="text-center mt-4">
+          <span className="text-gray-300">Don't have an account? </span>
+          <Link href="/sign-up" className="text-teal-400 font-semibold hover:underline">
+            Sign Up
+          </Link>
+        </div>
       </div>
 
-      {/* Floating background orbs */}
+      {/* Background floating orbs */}
       <div className="backgroundAnimation">
         {[...Array(5)].map((_, i) => (
           <motion.div
             key={i}
             className="floatingOrb"
             initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: [0, 0.3, 0], scale: [0, 1, 0] }}
+            animate={{
+              opacity: [0, 0.3, 0],
+              scale: [0, 1, 0],
+            }}
             transition={{
               duration: 4 + i,
               repeat: Infinity,
@@ -97,7 +93,7 @@ export default function Page() {
         ))}
       </div>
 
-      {/* Global Styles */}
+      {/* Global CSS */}
       <style jsx global>{`
         body {
           margin: 0;
@@ -154,28 +150,10 @@ export default function Page() {
           border: 1px solid #334155;
         }
 
-        .signInRoot { width: 100%; }
         .signInCardInner {
           box-shadow: none;
           border-radius: 16px;
           background: #1e293b;
-          padding: 2rem;
-        }
-
-        .signInHeaderTitle { font-size: 1.5rem; font-weight: 700; color: #e2e8f0; }
-        .signInHeaderSubtitle { color: #94a3b8; margin-bottom: 1.5rem; }
-        .socialButton {
-          border-radius: 8px;
-          border: 1px solid #334155;
-          background: #1e293b;
-          color: #e2e8f0;
-          transition: all 0.3s ease;
-          margin-bottom: 10px;
-        }
-        .socialButton:hover {
-          transform: translateY(-2px) scale(1.02);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-          background: #334155;
         }
 
         .primaryButton {
@@ -187,38 +165,7 @@ export default function Page() {
           transition: all 0.3s ease;
           color: white;
         }
-        .primaryButton:hover {
-          transform: translateY(-2px) scale(1.02);
-          box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
-          background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
-        }
 
-        .footerLink {
-          color: #8b5cf6;
-          font-weight: 600;
-          transition: color 0.3s ease;
-        }
-        .footerLink:hover { color: #a78bfa; }
-
-        .loadingSpinner {
-          width: 40px;
-          height: 40px;
-          border: 3px solid rgba(139, 92, 246, 0.3);
-          border-radius: 50%;
-          border-top-color: #8b5cf6;
-          animation: spin 1s ease-in-out infinite;
-          margin: 2rem auto;
-        }
-
-        .backgroundAnimation {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          z-index: 1;
-          pointer-events: none;
-        }
         .floatingOrb {
           position: absolute;
           width: 200px;
@@ -227,7 +174,15 @@ export default function Page() {
           filter: blur(40px);
         }
 
-        @keyframes spin { to { transform: rotate(360deg); } }
+        @media (max-width: 768px) {
+          .signInHeader h1 { font-size: 2rem; }
+          .signInHeader p { font-size: 1rem; }
+        }
+
+        @media (max-width: 480px) {
+          .signInContainer { padding: 10px; }
+          .signInHeader h1 { font-size: 1.75rem; }
+        }
       `}</style>
     </div>
   );
