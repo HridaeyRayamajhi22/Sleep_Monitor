@@ -1,2 +1,2 @@
 A project which helps to calculate and track sleep <br />
-Status: made animations and also a part of user's data page today...
+Status: The data and charts are to be updated..
