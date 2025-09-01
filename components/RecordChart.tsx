@@ -7,7 +7,7 @@ const RecordChart = async () => {
 
   if (error) {
     return (
-      <div className="bg-gray-800 rounded-2xl p-6 shadow-md border border-gray-700 text-center">
+      <div className="text-center">
         <p className="text-red-400 font-semibold">{error}</p>
       </div>
     );
@@ -15,7 +15,7 @@ const RecordChart = async () => {
 
   if (!records || records.length === 0) {
     return (
-      <div className="bg-gray-800 rounded-2xl p-6 shadow-md border border-gray-700 text-center">
+      <div className="text-center">
         <h2 className="text-xl font-bold mb-2 text-teal-400">
           No Sleep Records Found
         </h2>
@@ -29,17 +29,12 @@ const RecordChart = async () => {
   // Transform records for BarChart
   const chartData = records.map((record) => ({
     ...record,
-    date: new Date(record.date).toLocaleDateString(), // prettier date format
+    date: new Date(record.date).toLocaleDateString(),
   }));
 
   return (
-    <div className="bg-gray-800 rounded-2xl p-6 shadow-md border border-gray-700">
-      <h3 className="text-xl font-bold mb-4 text-teal-400 text-center">
-        Sleep Records Chart 🛌
-      </h3>
-      <div className="overflow-x-auto">
-        <BarChart records={chartData} />
-      </div>
+    <div className="h-full w-full">
+      <BarChart records={chartData} />
     </div>
   );
 };

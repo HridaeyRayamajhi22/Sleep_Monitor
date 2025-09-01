@@ -7,67 +7,142 @@ import RecordChart from "@/components/RecordChart";
 export default async function Home() {
   const user = await currentUser();
 
-  // Show guest view if no user is logged in
-  if (!user) {
-    return <Guest />;
-  }
+  if (!user) return <Guest />;
 
   return (
-    <main className="min-h-screen bg-gray-900 text-white pt-20 px-6 sm:px-10 lg:px-20">
-      {/* Main grid: user profile + add record + chart */}
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-3 gap-10">
+    <main className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-950 text-white pt-20 px-4 sm:px-6 lg:px-8">
+      {/* Glowing background */}
+      <div className="fixed top-0 left-0 w-full h-full -z-10 overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full filter blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-cyan-600/20 rounded-full filter blur-3xl animate-pulse delay-1000"></div>
+      </div>
 
-        {/* ===== Left Column: User Profile ===== */}
-        <div className="bg-gray-800 rounded-2xl shadow-xl p-6 flex flex-col items-center text-center">
-          <img
-            src={user.imageUrl}
-            alt={`${user.firstName}'s profile`}
-            className="w-28 h-28 rounded-full object-cover mb-4 border-4 border-teal-400 shadow-md"
-          />
-          <h2 className="text-2xl font-bold mb-4">
-            Welcome back, {user.fullName} 🎉
-          </h2>
-          <p className="text-gray-300 mb-4">
-            Here's a quick overview of your activity and sleep tracking.
-          </p>
+      <div className="max-w-7xl mx-auto space-y-10">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-400 mb-2">
+            Sleep Tracker Dashboard
+          </h1>
+          <p className="text-gray-400">Monitor and improve your sleep patterns</p>
+        </div>
 
-          <div className="w-full bg-gray-700 rounded-xl p-4 text-left space-y-2 border border-gray-600">
-            <p>
-              <span className="font-semibold text-teal-400">Joined:</span>{" "}
-              {new Date(user.createdAt).toLocaleDateString()}
+        {/* Main Grid: Profile + Add Record */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* User Profile */}
+          <div className="bg-gray-800/70 backdrop-blur-md rounded-2xl shadow-xl p-6 flex flex-col items-center text-center border border-gray-700/50">
+            <div className="relative mb-4">
+              <img
+                src={user.imageUrl}
+                alt={`${user.firstName}'s profile`}
+                className="w-28 h-28 rounded-full object-cover border-4 border-teal-400 shadow-lg"
+              />
+              <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center border-2 border-gray-800">
+                <span className="text-sm">😴</span>
+              </div>
+            </div>
+            <h2 className="text-2xl font-bold mb-2">Welcome back, {user.firstName}!</h2>
+            <p className="text-gray-300 mb-4 text-sm">
+              Track your sleep and improve your wellness.
             </p>
-            <p>
-              <span className="font-semibold text-teal-400">Last Active:</span>{" "}
-              {user.lastActiveAt
-                ? new Date(user.lastActiveAt).toLocaleString()
-                : "N/A"}
-            </p>
+            <div className="w-full bg-gray-700/50 rounded-xl p-4 text-left space-y-2 border border-gray-600/30">
+              <p className="flex justify-between items-center">
+                <span className="font-semibold text-teal-400">Joined:</span>
+                <span>{new Date(user.createdAt).toLocaleDateString()}</span>
+              </p>
+              <p className="flex justify-between items-center">
+                <span className="font-semibold text-teal-400">Last Active:</span>
+                <span>{user.lastActiveAt ? new Date(user.lastActiveAt).toLocaleDateString() : "N/A"}</span>
+              </p>
+            </div>
+          </div>
+
+          {/* Add New Record */}
+          <div className="lg:col-span-2">
+            <div className="bg-gray-800/70 backdrop-blur-md rounded-2xl shadow-xl p-6 h-full border border-gray-700/50 flex flex-col items-start">
+              <h3 className="text-xl font-bold mb-4 text-cyan-400 flex items-center">
+                <span className="mr-2">⏱</span> Add Sleep Record
+              </h3>
+              {/* Left-aligned content for animations */}
+              <div className="w-full">
+                <AddNewRecord />
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* ===== Middle Column: Add New Record ===== */}
-        <div className="lg:col-span-2">
-          <AddNewRecord />
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            { label: "Avg. Sleep", value: "7.2h", icon: "🛌", color: "cyan" },
+            { label: "Records", value: "24", icon: "📊", color: "purple" },
+            { label: "Consistency", value: "82%", icon: "⭐", color: "teal" },
+          ].map((stat) => (
+            <div
+              key={stat.label}
+              className={`bg-gray-800/70 backdrop-blur-md rounded-2xl p-5 border border-${stat.color}-700/30 shadow-lg`}
+            >
+              <div className="flex items-center">
+                <div className={`p-3 rounded-full bg-${stat.color}-500/10 mr-4`}>
+                  <span className="text-2xl">{stat.icon}</span>
+                </div>
+                <div>
+                  <p className="text-gray-400 text-sm">{stat.label}</p>
+                  <p className={`text-2xl font-bold text-${stat.color}-400`}>{stat.value}</p>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* ===== Right Column (optional grid row if needed) ===== */}
-        <div className="lg:col-span-3 mt-6 lg:mt-0">
-          <RecordChart />
+        {/* Chart Section */}
+        <div className="bg-gray-800/70 backdrop-blur-md rounded-2xl shadow-xl p-6 border border-gray-700/50 mb-10">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+            <h3 className="text-2xl font-bold text-white mb-4 sm:mb-0">Sleep History</h3>
+            <div className="flex space-x-2">
+              {["Week", "Month", "Year"].map((period) => (
+                <button
+                  key={period}
+                  className={`px-3 py-1.5 text-sm rounded-lg border transition ${
+                    period === "Month"
+                      ? "bg-cyan-500/10 text-cyan-400 border-cyan-600/30"
+                      : "bg-gray-700/50 border-gray-600/30 hover:bg-gray-700/70"
+                  }`}
+                >
+                  {period}
+                </button>
+              ))}
+            </div>
+          </div>
+           <RecordChart />  
+        </div>
+
+        {/* Sleep Tips */}
+        <div className="bg-gray-800/70 backdrop-blur-md rounded-2xl shadow-xl p-6 border border-gray-700/50 mt-10 mb-20">
+          <h3 className="text-xl font-bold mb-4 text-teal-400 flex items-center">
+            <span className="mr-2">💤</span> Sleep Improvement Tips
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[
+              {
+                title: "Consistent Schedule",
+                text: "Try to go to bed and wake up at the same time every day, even on weekends.",
+              },
+              {
+                title: "Dark Environment",
+                text: "Make your bedroom as dark as possible to improve sleep quality.",
+              },
+            ].map((tip) => (
+              <div
+                key={tip.title}
+                className="bg-gray-700/40 p-4 rounded-xl border border-gray-600/30"
+              >
+                <h4 className="font-semibold text-cyan-400 mb-2">{tip.title}</h4>
+                <p className="text-sm text-gray-300">{tip.text}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-
-      {/* ===== Optional Section: Sleep Overview Stats ===== */}
-      <section className="mt-10 max-w-7xl mx-auto">
-        <div className="bg-gray-800 rounded-2xl p-6 shadow-xl border border-gray-700">
-          <h3 className="text-xl font-bold mb-4 text-teal-400">
-            Your Sleep Overview 🛌
-          </h3>
-          <p className="text-gray-300">
-            Track your progress over the last week and see insights into your sleep patterns.
-          </p>
-          {/* You can add charts or stats components here */}
-        </div>
-      </section>
     </main>
   );
 }
