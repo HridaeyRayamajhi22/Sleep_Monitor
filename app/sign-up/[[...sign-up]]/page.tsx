@@ -39,14 +39,6 @@ export default function Page() {
           <SignUp
             path="/sign-up"
             routing="path"
-            signUpOptions={{
-              formFields: [
-                { type: 'first_name', required: true },
-                { type: 'last_name', required: true },
-                { type: 'email_address', required: true },
-                { type: 'password', required: true }
-              ]
-            }}
             appearance={{
               elements: {
                 rootBox: 'signUpRoot',
@@ -66,6 +58,7 @@ export default function Page() {
               }
             }}
           />
+
         </motion.div>
       </div>
 
