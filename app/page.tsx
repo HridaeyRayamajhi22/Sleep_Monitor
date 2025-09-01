@@ -100,33 +100,30 @@ export default async function Home() {
           ))}
         </div>
 
-        {/* Chart Section */}
-        <div className="bg-gray-800/70 backdrop-blur-md rounded-2xl shadow-xl p-6 border border-gray-700/50">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+        {/* Chart Section - Simplified without time period selection */}
+        <div className="rounded-2xl p-6 relative overflow-hidden">
+          <div className="mb-6">
             <h3 className="text-2xl font-bold text-white">Sleep History</h3>
-            <div className="flex space-x-2">
-              {["Week", "Month", "Year"].map((period) => (
-                <button
-                  key={period}
-                  className={`px-3 py-1.5 text-sm rounded-lg border transition ${
-                    period === "Month"
-                      ? "bg-cyan-500/10 text-cyan-400 border-cyan-600/30"
-                      : "bg-gray-700/50 border-gray-600/30 hover:bg-gray-700/70"
-                  }`}
-                >
-                  {period}
-                </button>
-              ))}
-            </div>
           </div>
-          <div className="h-96 mb-10">
+          <div className="h-96 relative z-10">
             <RecordChart />
+          </div>
+
+          {/* Glowing Overlay */}
+          <div className="absolute inset-0 -z-10">
+            <div className="absolute top-1/2 left-1/3 w-[30rem] h-[30rem] bg-purple-600/30 rounded-full blur-3xl animate-pulse"></div>
+            <div className="absolute bottom-1/3 right-1/4 w-[25rem] h-[25rem] bg-cyan-600/30 rounded-full blur-3xl animate-pulse delay-1000"></div>
           </div>
         </div>
 
-        {/* Sleep Tips */}
-        <div className="bg-gray-800/70 backdrop-blur-md rounded-2xl shadow-xl p-6 border border-gray-700/50 mt-10">
-          <h3 className="text-xl font-bold mb-4 text-teal-400 flex items-center">
+
+        {/* Best worst Sleep */}
+
+
+
+        {/* Sleep Tips - Moved to separate section with proper spacing */}
+        <div className="bg-gray-800/70 backdrop-blur-md rounded-2xl shadow-xl p-6 border border-gray-700/50 mt-12">
+          <h3 className="text-xl font-bold mb-6 text-teal-400 flex items-center">
             <span className="mr-2">💤</span> Sleep Improvement Tips
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -158,6 +155,7 @@ export default async function Home() {
             ))}
           </div>
         </div>
+
       </div>
     </main>
   );

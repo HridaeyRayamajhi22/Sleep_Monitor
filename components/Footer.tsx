@@ -35,7 +35,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-gray-900 border-t border-gray-700 text-gray-300">
+    <footer className="bg-gray-900 border-t border-gray-700 text-gray-300 mt-7">
       <motion.div 
         initial="hidden"
         whileInView="visible"
