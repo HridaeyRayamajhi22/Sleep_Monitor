@@ -229,7 +229,7 @@ const AboutPage = () => {
                   sleep data meaningful.
                 </p>
                 <p className="text-gray-300 leading-relaxed">
-                  With a blend of science, technology, and community, we're
+                  With a blend of science, technology, and community, we&apos;sre
                   helping people transform their nights into stronger, brighter
                   days.
                 </p>

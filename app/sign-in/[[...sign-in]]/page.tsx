@@ -59,7 +59,7 @@ export default function Page() {
 
         {/* Fallback Sign Up link */}
         <div className="text-center mt-4">
-          <span className="text-gray-300">Don't have an account? </span>
+          <span className="text-gray-300">Don&apos;t have an account? </span>
           <Link href="/sign-up" className="text-teal-400 font-semibold hover:underline">
             Sign Up
           </Link>

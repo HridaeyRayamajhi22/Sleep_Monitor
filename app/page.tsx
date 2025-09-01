@@ -8,6 +8,7 @@ import getBestWorstSleep from "@/app/actions/getBestWorstSleep";
 import RecordHistory from "@/components/RecordHistory";
 import getStats from "@/app/actions/getStats";
 import SlothWrapper from "@/components/SlothWrapper"; 
+import Image from "next/image";
 
 
 export default async function Home() {
@@ -97,7 +98,8 @@ export default async function Home() {
         {/* Enhanced Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-purple-400 to-teal-400 mb-2">
-            Sleep Monitor's Dashboard
+            Sleep Monitor&apos;s Dashboard
+
           </h1>
           <p className="text-gray-300 max-w-2xl mx-auto text-lg">
             Monitor your sleep patterns, track your progress, and improve your sleep quality
@@ -109,9 +111,9 @@ export default async function Home() {
           {/* Enhanced User Profile */}
           <div className="bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-6 flex flex-col items-center text-center border border-cyan-500/30 hover:border-cyan-500/50 transition-all duration-300 hover:shadow-cyan-500/20">
             <div className="relative mb-4">
-              <img
+              <Image
                 src={user.imageUrl}
-                alt={`${user.firstName}'s profile`}
+                alt={`${user.firstName}&apos;s  profile`}
                 className="w-28 h-28 rounded-full object-cover border-4 border-teal-400 shadow-lg hover:shadow-cyan-400/30 transition-all duration-300 hover:scale-105"
               />
               <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center border-2 border-gray-800 shadow-lg">
