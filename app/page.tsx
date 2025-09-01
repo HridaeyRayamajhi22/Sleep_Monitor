@@ -7,7 +7,8 @@ import SleepAnimation from "@/components/SleepAnimation";
 import getBestWorstSleep from "@/app/actions/getBestWorstSleep";
 import RecordHistory from "@/components/RecordHistory";
 import getStats from "@/app/actions/getStats";
-import Sloth from "@/components/Sloth";
+import SlothWrapper from "@/components/SlothWrapper"; 
+
 
 export default async function Home() {
   const user = await currentUser();
@@ -18,27 +19,27 @@ export default async function Home() {
 
   // Enhanced Tailwind-safe colors with better contrast
   const statColors = {
-    cyan: { 
-      border: "border-cyan-500", 
-      bg: "bg-gradient-to-br from-cyan-900/40 to-cyan-800/30", 
+    cyan: {
+      border: "border-cyan-500",
+      bg: "bg-gradient-to-br from-cyan-900/40 to-cyan-800/30",
       text: "text-cyan-300",
       hover: "hover:shadow-cyan-500/30"
     },
-    purple: { 
-      border: "border-purple-500", 
-      bg: "bg-gradient-to-br from-purple-900/40 to-purple-800/30", 
+    purple: {
+      border: "border-purple-500",
+      bg: "bg-gradient-to-br from-purple-900/40 to-purple-800/30",
       text: "text-purple-300",
       hover: "hover:shadow-purple-500/30"
     },
-    teal: { 
-      border: "border-teal-500", 
-      bg: "bg-gradient-to-br from-teal-900/40 to-teal-800/30", 
+    teal: {
+      border: "border-teal-500",
+      bg: "bg-gradient-to-br from-teal-900/40 to-teal-800/30",
       text: "text-teal-300",
       hover: "hover:shadow-teal-500/30"
     },
-    blue: { 
-      border: "border-blue-500", 
-      bg: "bg-gradient-to-br from-blue-900/40 to-blue-800/30", 
+    blue: {
+      border: "border-blue-500",
+      bg: "bg-gradient-to-br from-blue-900/40 to-blue-800/30",
       text: "text-blue-300",
       hover: "hover:shadow-blue-500/30"
     },
@@ -53,34 +54,35 @@ export default async function Home() {
 
   // Sleep quality indicators with better contrast
   const getSleepQuality = (hours: number) => {
-    if (hours >= 8) return { 
-      label: "Excellent", 
-      color: "text-green-300", 
-      bg: "bg-green-900/40", 
-      border: "border-green-600/50" 
+    if (hours >= 8) return {
+      label: "Excellent",
+      color: "text-green-300",
+      bg: "bg-green-900/40",
+      border: "border-green-600/50"
     };
-    if (hours >= 7) return { 
-      label: "Good", 
-      color: "text-teal-300", 
-      bg: "bg-teal-900/40", 
-      border: "border-teal-600/50" 
+    if (hours >= 7) return {
+      label: "Good",
+      color: "text-teal-300",
+      bg: "bg-teal-900/40",
+      border: "border-teal-600/50"
     };
-    if (hours >= 6) return { 
-      label: "Fair", 
-      color: "text-yellow-300", 
-      bg: "bg-yellow-900/40", 
-      border: "border-yellow-600/50" 
+    if (hours >= 6) return {
+      label: "Fair",
+      color: "text-yellow-300",
+      bg: "bg-yellow-900/40",
+      border: "border-yellow-600/50"
     };
-    return { 
-      label: "Poor", 
-      color: "text-red-300", 
-      bg: "bg-red-900/40", 
-      border: "border-red-600/50" 
+    return {
+      label: "Poor",
+      color: "text-red-300",
+      bg: "bg-red-900/40",
+      border: "border-red-600/50"
     };
   };
 
   const bestQuality = getSleepQuality(bestWorstSleep.bestSleep || 0);
   const worstQuality = getSleepQuality(bestWorstSleep.worstSleep || 0);
+
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-950 text-white pt-20 px-4 sm:px-6 lg:px-8">
@@ -94,7 +96,7 @@ export default async function Home() {
       <div className="max-w-7xl mx-auto space-y-12">
         {/* Enhanced Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-purple-400 to-teal-400 mb-2 animate-pulse">
+          <h1 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-purple-400 to-teal-400 mb-2">
             Sleep Monitor's Dashboard
           </h1>
           <p className="text-gray-300 max-w-2xl mx-auto text-lg">
@@ -196,9 +198,9 @@ export default async function Home() {
             </div>
 
             {/* Enhanced Sloth Animation */}
-              <div className="bg-gray-800/80 backdrop-blur-md rounded-2xl p-4 border border-gray-700 shadow-lg flex justify-center items-center">
-    <Sloth />
-  </div>
+            <div className="bg-gray-800/80 backdrop-blur-md rounded-2xl p-4 border border-gray-700 shadow-lg flex justify-center items-center">
+              <SlothWrapper />
+            </div>
           </div>
 
           {/* Enhanced Main Chart Container */}
