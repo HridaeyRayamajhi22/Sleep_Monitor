@@ -5,6 +5,7 @@ import AddNewRecord from "@/components/AddNewRecord";
 import RecordChart from "@/components/RecordChart";
 import SleepAnimation from "@/components/SleepAnimation";
 import getBestWorstSleep from '@/app/actions/getBestWorstSleep';
+import RecordHistory from "@/components/RecordHistory";
 
 
 export default async function Home() {
@@ -145,6 +146,9 @@ export default async function Home() {
             <p className="text-white">{BestWorstSleep.worstSleep} hrs</p>
           </div>
         </div>
+
+        {/* History of sleep record */}
+        <RecordHistory />
 
 
         {/* Sleep Tips */}
