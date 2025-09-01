@@ -1,5 +1,6 @@
+
 'use server'
-import { auth } from '@clerk/nextjs/server'
+import { auth, currentUser } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
 import { revalidatePath } from 'next/cache'
 
@@ -19,48 +20,55 @@ async function addSleepRecord(formData: FormData): Promise<RecordResult> {
   const amountValue = formData.get('amount')
   const dateValue = formData.get('date')
 
-  //  Input validation
-  if (!textValue || textValue === '' || !amountValue || !dateValue || dateValue === '') {
+  if (!textValue || !amountValue || !dateValue) {
     return { error: 'Text, amount or date is missing' }
   }
 
-  const text: string = textValue.toString()
-  const amount: number = parseFloat(amountValue.toString())
+  const text = textValue.toString()
+  const amount = parseFloat(amountValue.toString())
   let date: string
 
   try {
     date = new Date(dateValue.toString()).toISOString()
-  } catch (error) {
-    console.error('Invalid date format:', error)
+  } catch {
     return { error: 'Invalid date format' }
   }
 
-  //  Get logged-in user
-  const { userId } = await auth()
+  // Get logged-in user from Clerk
+  const user = await currentUser()
+  if (!user) return { error: 'User not found' }
 
-  if (!userId) {
-    return { error: 'User not found' }
-  }
+  const userId = user.id
+  const email = user.emailAddresses?.[0]?.emailAddress
+  if (!email) return { error: 'User email not found' }
 
   try {
-    // Check if a record with the same date already exists
+    // Ensure user exists in the database
+    let dbUser = await db.user.findUnique({ where: { id: userId } })
+    if (!dbUser) {
+      dbUser = await db.user.create({
+        data: {
+          id: userId,
+          clerkUserId: userId,
+          email,
+          name: user.firstName + ' ' + (user.lastName || ''),
+          image: user.profileImageUrl,
+        },
+      })
+    }
+
+    // Check if a record for the same date exists
     const existingRecord = await db.record.findFirst({
-      where: {
-        userId,
-        date,
-      },
+      where: { userId, date },
     })
 
     let recordData: RecordData
 
     if (existingRecord) {
-      // Update the record
+      // Update existing record
       const updatedRecord = await db.record.update({
         where: { id: existingRecord.id },
-        data: {
-          text,
-          amount,
-        },
+        data: { text, amount },
       })
 
       recordData = {
@@ -69,13 +77,13 @@ async function addSleepRecord(formData: FormData): Promise<RecordResult> {
         date: updatedRecord.date?.toISOString() || date,
       }
     } else {
-      // Create a new record
+      // Create new record
       const createdRecord = await db.record.create({
         data: {
           text,
           amount,
           date,
-          userId,
+          userId, // Must match User.clerkUserId if FK is set that way
         },
       })
 
@@ -87,7 +95,6 @@ async function addSleepRecord(formData: FormData): Promise<RecordResult> {
     }
 
     revalidatePath('/')
-
     return { data: recordData }
   } catch (error) {
     console.error('Error adding sleep record:', error)
