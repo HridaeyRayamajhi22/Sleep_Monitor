@@ -229,7 +229,7 @@ const AboutPage = () => {
                   sleep data meaningful.
                 </p>
                 <p className="text-gray-300 leading-relaxed">
-                  With a blend of science, technology, and community, we&apos;sre
+                  With a blend of science, technology, and community, we&apos;re
                   helping people transform their nights into stronger, brighter
                   days.
                 </p>
@@ -241,9 +241,10 @@ const AboutPage = () => {
             className="bg-gray-800 rounded-2xl p-10 shadow-xl border border-gray-700 h-full flex items-center justify-center"
           >
             <blockquote className="text-xl text-gray-300 italic leading-relaxed text-center">
-              "Good sleep is the foundation of good health. We built
-              SleepMonitor to help you achieve it." <br /> ~ Hridaey Raya
+              &quot;Good sleep is the foundation of good health. We built
+              SleepMonitor to help you achieve it.&quot; <br /> ~ Hridaey Raya
             </blockquote>
+
           </motion.div>
         </div>
       </motion.section>
