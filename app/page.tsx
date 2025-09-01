@@ -3,6 +3,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import Guest from "@/components/Guest";
 import AddNewRecord from "@/components/AddNewRecord";
 import RecordChart from "@/components/RecordChart";
+import SleepAnimation from "@/components/SleepAnimation";
 
 export default async function Home() {
   const user = await currentUser();
@@ -11,13 +12,13 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-950 text-white pt-20 px-4 sm:px-6 lg:px-8">
-      {/* Glowing background */}
+      {/* Glowing Background */}
       <div className="fixed top-0 left-0 w-full h-full -z-10 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full filter blur-3xl animate-pulse"></div>
         <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-cyan-600/20 rounded-full filter blur-3xl animate-pulse delay-1000"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto space-y-10">
+      <div className="max-w-7xl mx-auto space-y-12">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-400 mb-2">
@@ -26,8 +27,8 @@ export default async function Home() {
           <p className="text-gray-400">Monitor and improve your sleep patterns</p>
         </div>
 
-        {/* Main Grid: Profile + Add Record */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Profile + Add Record */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* User Profile */}
           <div className="bg-gray-800/70 backdrop-blur-md rounded-2xl shadow-xl p-6 flex flex-col items-center text-center border border-gray-700/50">
             <div className="relative mb-4">
@@ -56,15 +57,20 @@ export default async function Home() {
             </div>
           </div>
 
-          {/* Add New Record */}
+          {/* Add New Record + Animation */}
           <div className="lg:col-span-2">
-            <div className="bg-gray-800/70 backdrop-blur-md rounded-2xl shadow-xl p-6 h-full border border-gray-700/50 flex flex-col items-start">
-              <h3 className="text-xl font-bold mb-4 text-cyan-400 flex items-center">
-                <span className="mr-2">⏱</span> Add Sleep Record
-              </h3>
-              {/* Left-aligned content for animations */}
-              <div className="w-full">
+            <div className="bg-gray-800/70 backdrop-blur-md rounded-2xl shadow-xl p-6 border border-gray-700/50 flex flex-col md:flex-row gap-6">
+              {/* Add Record Form */}
+              <div className="w-full md:w-1/2">
+                <h3 className="text-xl font-bold mb-4 text-cyan-400 flex items-center">
+                  <span className="mr-2">⏱</span> Track Your Sleep
+                </h3>
                 <AddNewRecord />
+              </div>
+
+              {/* Animation */}
+              <div className="w-full md:w-1/2 hidden md:flex items-center justify-center">
+                <SleepAnimation />
               </div>
             </div>
           </div>
@@ -95,9 +101,9 @@ export default async function Home() {
         </div>
 
         {/* Chart Section */}
-        <div className="bg-gray-800/70 backdrop-blur-md rounded-2xl shadow-xl p-6 border border-gray-700/50 mb-10">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-            <h3 className="text-2xl font-bold text-white mb-4 sm:mb-0">Sleep History</h3>
+        <div className="bg-gray-800/70 backdrop-blur-md rounded-2xl shadow-xl p-6 border border-gray-700/50">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+            <h3 className="text-2xl font-bold text-white">Sleep History</h3>
             <div className="flex space-x-2">
               {["Week", "Month", "Year"].map((period) => (
                 <button
@@ -113,15 +119,17 @@ export default async function Home() {
               ))}
             </div>
           </div>
-           <RecordChart />  
+          <div className="h-96 mb-10">
+            <RecordChart />
+          </div>
         </div>
 
         {/* Sleep Tips */}
-        <div className="bg-gray-800/70 backdrop-blur-md rounded-2xl shadow-xl p-6 border border-gray-700/50 mt-10 mb-20">
+        <div className="bg-gray-800/70 backdrop-blur-md rounded-2xl shadow-xl p-6 border border-gray-700/50 mt-10">
           <h3 className="text-xl font-bold mb-4 text-teal-400 flex items-center">
             <span className="mr-2">💤</span> Sleep Improvement Tips
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
               {
                 title: "Consistent Schedule",
@@ -131,10 +139,18 @@ export default async function Home() {
                 title: "Dark Environment",
                 text: "Make your bedroom as dark as possible to improve sleep quality.",
               },
+              {
+                title: "Limit Blue Light",
+                text: "Avoid screens for at least an hour before bedtime to help your mind unwind.",
+              },
+              {
+                title: "Comfortable Temperature",
+                text: "Keep your bedroom slightly cool (around 65°F or 18°C) for optimal sleep.",
+              },
             ].map((tip) => (
               <div
                 key={tip.title}
-                className="bg-gray-700/40 p-4 rounded-xl border border-gray-600/30"
+                className="bg-gray-700/40 p-4 rounded-xl border border-gray-600/30 hover:border-cyan-500/30 transition-colors"
               >
                 <h4 className="font-semibold text-cyan-400 mb-2">{tip.title}</h4>
                 <p className="text-sm text-gray-300">{tip.text}</p>
