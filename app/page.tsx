@@ -122,7 +122,7 @@ export default async function Home() {
         {/* Chart Section */}
         <div id="sleep-history" className="rounded-2xl p-6 relative overflow-hidden">
           <div className="mb-6">
-            <h3 className="text-2xl font-bold text-white">Sleep History</h3>
+            <h3 className="text-2xl font-bold text-white">Sleep Chart</h3>
           </div>
           <div className="h-96 relative z-10">
             <RecordChart />
