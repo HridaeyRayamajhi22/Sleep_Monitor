@@ -238,25 +238,36 @@ export default function Navbar() {
       </AnimatePresence>
 
       {/* Clerk dark mode overrides */}
-      <style jsx global>{`
-        .cl-userButtonTrigger {
-          background-color: transparent !important;
-          border: 1px solid rgba(255, 255, 255, 0.15) !important;
-        }
-        .cl-userButtonPopoverCard {
-          background-color: #1f2937 !important;
-          border: 1px solid #374151 !important;
-        }
-        .cl-userButtonPopoverActionButton {
-          color: #f3f4f6 !important;
-        }
-        .cl-userButtonPopoverActionButton:hover {
-          background-color: #374151 !important;
-        }
-        .cl-userButtonPopoverFooter {
-          display: none !important;
-        }
-      `}</style>
+   <style jsx global>{`
+  /* Trigger (avatar circle) */
+  .cl-userButtonTrigger {
+    background-color: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  }
+
+  /* Dropdown card */
+  .cl-userButtonPopoverCard {
+    background-color: #0ea5e9 !important; /* bright blue vibe */
+    border: 1px solid #0ea5e9 !important;
+  }
+
+  /* Action buttons */
+  .cl-userButtonPopoverActionButton {
+    color: #111827 !important; /* dark text */
+    background-color: transparent !important;
+  }
+  .cl-userButtonPopoverActionButton:hover {
+    background-color: #22d3ee !important; /* lighter teal/blue hover */
+    color: #111827 !important;
+  }
+
+  /* Remove footer */
+  .cl-userButtonPopoverFooter {
+    display: none !important;
+  }
+`}</style>
+
+
     </nav>
   );
 }
