@@ -106,10 +106,16 @@ export default function Navbar() {
                     href={href}
                     // // className={`text-base font-medium transition ${isActive ? "text-blue-400 underline" : "text-gray-300 hover:text-blue-400"
                     //   }`}
-                    className={`text-base font-medium transition ${isActive
-                        ? "text-blue-400 active-glow"  // glow effect
-                        : "text-gray-300 hover:text-blue-400"
-                      }`}
+                     className={`relative text-base font-medium transition-all duration-300 ${
+                  isActive
+                    ? "text-blue-400 active-glow scale-110" // glow effect with scale
+                    : "text-gray-300 hover:text-blue-400 hover:scale-105"
+                }`}
+                style={{
+                  textShadow: isActive 
+                    ? "0 0 8px #00ffff, 0 0 16px #00ffff, 0 0 24px #00ffff" 
+                    : "none"
+                }}
                   >
                     {item}
                   </Link>
