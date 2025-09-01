@@ -7,6 +7,7 @@ import SleepAnimation from "@/components/SleepAnimation";
 import getBestWorstSleep from "@/app/actions/getBestWorstSleep";
 import RecordHistory from "@/components/RecordHistory";
 import getStats from "@/app/actions/getStats";
+import Sloth from "@/components/Sloth";
 
 export default async function Home() {
   const user = await currentUser();
@@ -130,25 +131,36 @@ export default async function Home() {
         </div>
 
         {/* Chart + Best/Worst Sleep */}
+        {/* Chart + Best/Worst Sleep */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-1 space-y-4">
+            {/* Best Sleep Card */}
             <div className="bg-gradient-to-br from-teal-900/30 to-teal-800/20 backdrop-blur-md rounded-2xl p-5 border border-teal-700/30 shadow-lg">
               <h4 className="text-teal-400 font-semibold mb-2">Best Sleep</h4>
               <p className="text-3xl font-bold text-white">{bestWorstSleep.bestSleep || 0} hrs</p>
               <span className={`text-sm px-2 py-1 rounded-full ${bestQuality.bg} ${bestQuality.color}`}>{bestQuality.label}</span>
             </div>
+
+            {/* Worst Sleep Card */}
             <div className="bg-gradient-to-br from-purple-900/30 to-purple-800/20 backdrop-blur-md rounded-2xl p-5 border border-purple-700/30 shadow-lg">
               <h4 className="text-purple-400 font-semibold mb-2">Worst Sleep</h4>
               <p className="text-3xl font-bold text-white">{bestWorstSleep.worstSleep || 0} hrs</p>
               <span className={`text-sm px-2 py-1 rounded-full ${worstQuality.bg} ${worstQuality.color}`}>{worstQuality.label}</span>
             </div>
+
+            {/* Sloth Animation Below Cards */}
+            <div className="bg-gray-800/70 backdrop-blur-md rounded-2xl p-4 border border-gray-700/50 shadow-lg flex items-center justify-center">
+              <Sloth />
+            </div>
           </div>
 
+          {/* Main Chart Container */}
           <div className="lg:col-span-3 bg-gray-800/70 backdrop-blur-md rounded-2xl p-6 border border-gray-700/50 shadow-2xl relative overflow-hidden">
             <h3 className="text-2xl font-bold text-white mb-4">Sleep History & Patterns</h3>
             <div className="h-96 relative z-10">
               <RecordChart />
             </div>
+            {/* Decorative Background Blobs */}
             <div className="absolute inset-0 -z-10">
               <div className="absolute top-1/2 left-1/3 w-[30rem] h-[30rem] bg-purple-600/30 rounded-full blur-3xl animate-pulse"></div>
               <div className="absolute bottom-1/3 right-1/4 w-[25rem] h-[25rem] bg-cyan-600/30 rounded-full blur-3xl animate-pulse delay-1000"></div>
