@@ -4,11 +4,21 @@ import Guest from "@/components/Guest";
 import AddNewRecord from "@/components/AddNewRecord";
 import RecordChart from "@/components/RecordChart";
 import SleepAnimation from "@/components/SleepAnimation";
+import getBestWorstSleep from '@/app/actions/getBestWorstSleep';
+
 
 export default async function Home() {
   const user = await currentUser();
+  const BestWorstSleep = await getBestWorstSleep()
 
   if (!user) return <Guest />;
+
+  // Predefined Tailwind-safe color classes
+  const statColors: Record<string, string> = {
+    cyan: "border-cyan-700/30 bg-cyan-500/10 text-cyan-400",
+    purple: "border-purple-700/30 bg-purple-500/10 text-purple-400",
+    teal: "border-teal-700/30 bg-teal-500/10 text-teal-400",
+  };
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-950 text-white pt-20 px-4 sm:px-6 lg:px-8">
@@ -41,7 +51,9 @@ export default async function Home() {
                 <span className="text-sm">😴</span>
               </div>
             </div>
-            <h2 className="text-2xl font-bold mb-2">Welcome back, {user.firstName}!</h2>
+            <h2 className="text-2xl font-bold mb-2">
+              Welcome back, {user.firstName}!
+            </h2>
             <p className="text-gray-300 mb-4 text-sm">
               Track your sleep and improve your wellness.
             </p>
@@ -52,7 +64,11 @@ export default async function Home() {
               </p>
               <p className="flex justify-between items-center">
                 <span className="font-semibold text-teal-400">Last Active:</span>
-                <span>{user.lastActiveAt ? new Date(user.lastActiveAt).toLocaleDateString() : "N/A"}</span>
+                <span>
+                  {user.lastActiveAt
+                    ? new Date(user.lastActiveAt).toLocaleDateString()
+                    : "N/A"}
+                </span>
               </p>
             </div>
           </div>
@@ -69,7 +85,7 @@ export default async function Home() {
               </div>
 
               {/* Animation */}
-              <div className="w-full md:w-1/2 hidden md:flex items-center justify-center">
+              <div className="w-full md:w-1/2 hidden md:flex items-center justify-center cursor-pointer">
                 <SleepAnimation />
               </div>
             </div>
@@ -85,23 +101,25 @@ export default async function Home() {
           ].map((stat) => (
             <div
               key={stat.label}
-              className={`bg-gray-800/70 backdrop-blur-md rounded-2xl p-5 border border-${stat.color}-700/30 shadow-lg`}
+              className={`bg-gray-800/70 backdrop-blur-md rounded-2xl p-5 border shadow-lg ${statColors[stat.color].split(" ")[0]}`}
             >
               <div className="flex items-center">
-                <div className={`p-3 rounded-full bg-${stat.color}-500/10 mr-4`}>
+                <div className={`p-3 rounded-full mr-4 ${statColors[stat.color].split(" ")[1]}`}>
                   <span className="text-2xl">{stat.icon}</span>
                 </div>
                 <div>
                   <p className="text-gray-400 text-sm">{stat.label}</p>
-                  <p className={`text-2xl font-bold text-${stat.color}-400`}>{stat.value}</p>
+                  <p className={`text-2xl font-bold ${statColors[stat.color].split(" ")[2]}`}>
+                    {stat.value}
+                  </p>
                 </div>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Chart Section - Simplified without time period selection */}
-        <div className="rounded-2xl p-6 relative overflow-hidden">
+        {/* Chart Section */}
+        <div id="sleep-history" className="rounded-2xl p-6 relative overflow-hidden">
           <div className="mb-6">
             <h3 className="text-2xl font-bold text-white">Sleep History</h3>
           </div>
@@ -116,12 +134,20 @@ export default async function Home() {
           </div>
         </div>
 
+        {/* Best/Worst Sleep */}
+        <div className="grid grid-cols-2 gap-4 mt-4">
+          <div className="bg-gray-700/50 p-4 rounded-lg">
+            <h4 className="text-teal-400 font-semibold">Best Sleep</h4>
+            <p className="text-white">{BestWorstSleep.bestSleep} hrs</p>
+          </div>
+          <div className="bg-gray-700/50 p-4 rounded-lg">
+            <h4 className="text-purple-400 font-semibold">Worst Sleep</h4>
+            <p className="text-white">{BestWorstSleep.worstSleep} hrs</p>
+          </div>
+        </div>
 
-        {/* Best worst Sleep */}
 
-
-
-        {/* Sleep Tips - Moved to separate section with proper spacing */}
+        {/* Sleep Tips */}
         <div className="bg-gray-800/70 backdrop-blur-md rounded-2xl shadow-xl p-6 border border-gray-700/50 mt-12">
           <h3 className="text-xl font-bold mb-6 text-teal-400 flex items-center">
             <span className="mr-2">💤</span> Sleep Improvement Tips
@@ -155,7 +181,6 @@ export default async function Home() {
             ))}
           </div>
         </div>
-
       </div>
     </main>
   );
