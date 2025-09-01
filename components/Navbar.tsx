@@ -100,22 +100,23 @@ export default function Navbar() {
                   key={item}
                   variants={menuItem}
                   whileHover={{ y: -2 }}
+                  initial={{ scale: 1 }}
+                  animate={{ scale: isActive ? 1.2 : 1 }}   // grow if active
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
                   whileTap={{ y: 0 }}
                 >
                   <Link
                     href={href}
-                    // // className={`text-base font-medium transition ${isActive ? "text-blue-400 underline" : "text-gray-300 hover:text-blue-400"
-                    //   }`}
-                     className={`relative text-base font-medium transition-all duration-300 ${
-                  isActive
-                    ? "text-blue-400 active-glow scale-110" // glow effect with scale
-                    : "text-gray-300 hover:text-blue-400 hover:scale-105"
-                }`}
-                style={{
-                  textShadow: isActive 
-                    ? "0 0 8px #00ffff, 0 0 16px #00ffff, 0 0 24px #00ffff" 
-                    : "none"
-                }}
+                    className={`text-base font-medium transition-colors ${isActive
+                      ? "text-blue-400 active-glow"
+                      : "text-gray-300 hover:text-blue-400"
+                      }`}
+
+                    style={{
+                      textShadow: isActive
+                        ? "0 0 8px #00ffff, 0 0 16px #00ffff, 0 0 24px #00ffff"
+                        : "none"
+                    }}
                   >
                     {item}
                   </Link>
