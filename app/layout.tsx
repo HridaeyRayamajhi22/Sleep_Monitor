@@ -18,6 +18,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Sleep Monitor",
   description: "Sleep is savior ",
+   icons: {
+      icon: "/favicon.ico",
+    },
 };
 
 export default function RootLayout({
