@@ -52,7 +52,7 @@ async function addSleepRecord(formData: FormData): Promise<RecordResult> {
           clerkUserId: userId,
           email,
           name: user.firstName + ' ' + (user.lastName || ''),
-          image: user.profileImageUrl,
+          image: user.imageUrl,
         },
       })
     }
