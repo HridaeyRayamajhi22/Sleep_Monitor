@@ -124,7 +124,7 @@ export default async function Home() {
               Welcome back, {user.firstName || "User"}!
             </h2>
             <p className="text-gray-300 mb-4 text-sm">
-              You've tracked <span className="text-cyan-400 font-semibold">{statsData.totalRecords}</span> sleep sessions
+              You&apos;ve tracked <span className="text-cyan-400 font-semibold">{statsData.totalRecords}</span> sleep sessions
             </p>
             <div className="w-full bg-gray-700/60 rounded-xl p-4 text-left space-y-2 border border-gray-600/50 hover:border-teal-400/50 transition-colors">
               <p className="flex justify-between items-center">

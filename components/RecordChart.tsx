@@ -1,6 +1,5 @@
 import getRecords from "@/app/actions/getRecords";
 import BarChart from "./BarChart";
-import { Record } from "@/types/Record";
 
 const RecordChart = async () => {
   const { records, error } = await getRecords();

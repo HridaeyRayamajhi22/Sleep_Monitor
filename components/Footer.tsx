@@ -64,7 +64,7 @@ const Footer = () => {
         <motion.div variants={fadeInUp}>
           <h3 className="text-lg font-semibold text-white mb-4">Quick Links</h3>
           <ul className="space-y-2">
-            {["Home", "About", "Contact", "Get Started"].map((item, index) => (
+            {["Home", "About", "Contact", "Get Started"].map((item) => (
               <motion.li
                 key={item}
                 variants={linkItem}
@@ -85,7 +85,7 @@ const Footer = () => {
         <motion.div variants={fadeInUp}>
           <h3 className="text-lg font-semibold text-white mb-4">Resources</h3>
           <ul className="space-y-2">
-            {["Blog", "FAQs", "Privacy Policy", "Terms of Service"].map((item, index) => (
+            {["Blog", "FAQs", "Privacy Policy", "Terms of Service"].map((item) => (
               <motion.li
                 key={item}
                 variants={linkItem}

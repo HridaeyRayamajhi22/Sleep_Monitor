@@ -9,6 +9,9 @@ import {
   Title,
   Tooltip,
   Legend,
+  ChartOptions,
+  TooltipItem,
+  ChartData,
 } from 'chart.js';
 
 // Register Chart.js components
@@ -29,16 +32,16 @@ interface Record {
 
 const BarChart = ({ records }: { records: Record[] }) => {
   // Prepare data for the chart
-  const data = {
+  const data: ChartData<'bar'> = {
     labels: records.map((record) => new Date(record.date).toLocaleDateString()),
     datasets: [
       {
         label: 'Hours Slept',
         data: records.map((record) => record.amount),
         backgroundColor: records.map((record) => {
-          if (record.amount < 5) return 'rgba(239, 68, 68, 0.7)'; // Red for very low sleep
-          if (record.amount < 7) return 'rgba(249, 115, 22, 0.7)'; // Orange for low sleep
-          return 'rgba(34, 197, 94, 0.7)'; // Green for healthy sleep
+          if (record.amount < 5) return 'rgba(239, 68, 68, 0.7)'; // Red
+          if (record.amount < 7) return 'rgba(249, 115, 22, 0.7)'; // Orange
+          return 'rgba(34, 197, 94, 0.7)'; // Green
         }),
         borderColor: records.map((record) => {
           if (record.amount < 5) return 'rgba(239, 68, 68, 1)';
@@ -53,23 +56,23 @@ const BarChart = ({ records }: { records: Record[] }) => {
     ],
   };
 
-  const options = {
+  const options: ChartOptions<'bar'> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: {
         display: true,
-        position: 'top' as const,
+        position: 'top',
         labels: {
           color: '#e2e8f0',
           font: {
             size: 12,
-            family: "'Inter', sans-serif"
+            family: "'Inter', sans-serif",
           },
           padding: 20,
           usePointStyle: true,
-          pointStyle: 'circle'
-        }
+          pointStyle: 'circle',
+        },
       },
       tooltip: {
         backgroundColor: 'rgba(26, 32, 44, 0.9)',
@@ -77,20 +80,20 @@ const BarChart = ({ records }: { records: Record[] }) => {
         bodyColor: '#e2e8f0',
         titleFont: {
           family: "'Inter', sans-serif",
-          size: 14
+          size: 14,
         },
         bodyFont: {
           family: "'Inter', sans-serif",
-          size: 13
+          size: 13,
         },
         padding: 12,
         cornerRadius: 6,
         displayColors: false,
         callbacks: {
-          label: function(context: any) {
+          label: function (context: TooltipItem<'bar'>) {
             return `Hours: ${context.parsed.y}`;
-          }
-        }
+          },
+        },
       },
     },
     scales: {
@@ -99,7 +102,7 @@ const BarChart = ({ records }: { records: Record[] }) => {
           color: '#a0aec0',
           font: {
             size: 11,
-            family: "'Inter', sans-serif"
+            family: "'Inter', sans-serif",
           },
           maxRotation: 45,
         },
@@ -116,12 +119,12 @@ const BarChart = ({ records }: { records: Record[] }) => {
           color: '#a0aec0',
           font: {
             size: 11,
-            family: "'Inter', sans-serif"
+            family: "'Inter', sans-serif",
           },
           stepSize: 1,
-          callback: function(value: any) {
+          callback: function (value: number | string) {
             return value + 'h';
-          }
+          },
         },
         grid: {
           color: 'rgba(74, 85, 104, 0.3)',
@@ -131,7 +134,7 @@ const BarChart = ({ records }: { records: Record[] }) => {
     },
     animation: {
       duration: 1500,
-      easing: 'easeOutQuart' as const
+      easing: 'easeOutQuart',
     },
   };
 
@@ -140,7 +143,7 @@ const BarChart = ({ records }: { records: Record[] }) => {
       {/* Glowing background effects */}
       <div className="absolute -top-20 -left-20 w-40 h-40 bg-purple-600 rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
       <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-blue-600 rounded-full filter blur-3xl opacity-20 animate-pulse delay-1000"></div>
-      
+
       {/* Chart title */}
       <div className="mb-6 text-center">
         <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-400">
@@ -148,17 +151,22 @@ const BarChart = ({ records }: { records: Record[] }) => {
         </h2>
         <p className="text-gray-400 mt-2 text-sm">Track your nightly rest</p>
       </div>
-      
+
       {/* Chart container */}
       <div className="relative z-10" style={{ height: '400px' }}>
         <Bar data={data} options={options} />
       </div>
-      
+
       {/* Average sleep indicator */}
       <div className="mt-6 text-center">
         <p className="text-gray-400 text-sm">
-          Average: <span className="font-bold text-cyan-400">
-            {(records.reduce((sum, record) => sum + record.amount, 0) / records.length).toFixed(1)} hours
+          Average:{' '}
+          <span className="font-bold text-cyan-400">
+            {(
+              records.reduce((sum, record) => sum + record.amount, 0) /
+              records.length
+            ).toFixed(1)}{' '}
+            hours
           </span>
         </p>
       </div>
