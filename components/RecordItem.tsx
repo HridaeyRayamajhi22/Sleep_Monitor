@@ -34,9 +34,8 @@ const RecordItem = ({ record }: { record: Record }) => {
       <button
         onClick={() => handleDeleteRecord(record.id)}
         disabled={isLoading}
-        className={`mt-2 md:mt-0 bg-red-600 hover:bg-red-700 text-white rounded-full w-8 h-8 flex items-center justify-center transition ${
-          isLoading ? 'opacity-50 cursor-not-allowed' : ''
-        }`}
+        className={`mt-2 md:mt-0 bg-red-600 hover:bg-red-700 text-white rounded-full w-8 h-8 flex items-center justify-center transition ${isLoading ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
         aria-label='Delete record'
       >
         {isLoading ? (

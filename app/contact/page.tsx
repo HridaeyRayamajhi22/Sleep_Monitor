@@ -68,7 +68,7 @@ const ContactPage = () => {
           variants={fadeInUp}
           className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed"
         >
-          Have a question or need help? We&apos;dd love to hear from you.  
+          Have a question or need help? We&apos;dd love to hear from you.
           Reach out and we&apos;ll get back to you as soon as possible.
         </motion.p>
       </motion.section>

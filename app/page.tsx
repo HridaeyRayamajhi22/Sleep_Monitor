@@ -7,7 +7,7 @@ import SleepAnimation from "@/components/SleepAnimation";
 import getBestWorstSleep from "@/app/actions/getBestWorstSleep";
 import RecordHistory from "@/components/RecordHistory";
 import getStats from "@/app/actions/getStats";
-import SlothWrapper from "@/components/SlothWrapper"; 
+import SlothWrapper from "@/components/SlothWrapper";
 import Image from "next/image";
 
 export default async function Home() {
@@ -52,13 +52,13 @@ export default async function Home() {
     icon: string;
     color: keyof typeof statColors;
   };
-  
+
   // Stats array
   const stats: Stat[] = [
-  { label: "Avg. Sleep", value: `${statsData?.avgSleep ?? 0}h`, icon: "🛌", color: "cyan" },
-  { label: "Records", value: statsData?.totalRecords ?? 0, icon: "📊", color: "purple" },
-  { label: "Consistency", value: `${statsData?.consistency ?? 0}%`, icon: "⭐", color: "teal" },
-];
+    { label: "Avg. Sleep", value: `${statsData?.avgSleep ?? 0}h`, icon: "🛌", color: "cyan" },
+    { label: "Records", value: statsData?.totalRecords ?? 0, icon: "📊", color: "purple" },
+    { label: "Consistency", value: `${statsData?.consistency ?? 0}%`, icon: "⭐", color: "teal" },
+  ];
 
 
   // Sleep quality indicators with better contrast

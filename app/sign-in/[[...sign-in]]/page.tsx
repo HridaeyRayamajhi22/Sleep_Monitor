@@ -37,7 +37,7 @@ export default function Page() {
           <SignIn
             path="/sign-in"
             routing="path"       // required for signUpUrl
-            signUpUrl="/sign-up" // points to your sign up page
+            signUpUrl="/sign-up" // points to sign up page
             appearance={{
               elements: {
                 rootBox: 'signInRoot',
