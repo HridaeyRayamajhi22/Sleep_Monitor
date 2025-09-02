@@ -10,7 +10,6 @@ import getStats from "@/app/actions/getStats";
 import SlothWrapper from "@/components/SlothWrapper"; 
 import Image from "next/image";
 
-
 export default async function Home() {
   const user = await currentUser();
   const bestWorstSleep = await getBestWorstSleep();
@@ -24,30 +23,38 @@ export default async function Home() {
       border: "border-cyan-500",
       bg: "bg-gradient-to-br from-cyan-900/40 to-cyan-800/30",
       text: "text-cyan-300",
-      hover: "hover:shadow-cyan-500/30"
+      hover: "hover:shadow-cyan-500/30",
     },
     purple: {
       border: "border-purple-500",
       bg: "bg-gradient-to-br from-purple-900/40 to-purple-800/30",
       text: "text-purple-300",
-      hover: "hover:shadow-purple-500/30"
+      hover: "hover:shadow-purple-500/30",
     },
     teal: {
       border: "border-teal-500",
       bg: "bg-gradient-to-br from-teal-900/40 to-teal-800/30",
       text: "text-teal-300",
-      hover: "hover:shadow-teal-500/30"
+      hover: "hover:shadow-teal-500/30",
     },
     blue: {
       border: "border-blue-500",
       bg: "bg-gradient-to-br from-blue-900/40 to-blue-800/30",
       text: "text-blue-300",
-      hover: "hover:shadow-blue-500/30"
+      hover: "hover:shadow-blue-500/30",
     },
-  };
+  } as const;
 
+  //  Corrected Stat type
+  type Stat = {
+    label: string;
+    value: string | number;
+    icon: string;
+    color: keyof typeof statColors;
+  };
+  
   // Stats array
-  const stats = [
+  const stats: Stat[] = [
     { label: "Avg. Sleep", value: `${statsData.avgSleep}h`, icon: "🛌", color: "cyan" },
     { label: "Records", value: statsData.totalRecords, icon: "📊", color: "purple" },
     { label: "Consistency", value: `${statsData.consistency}%`, icon: "⭐", color: "teal" },
@@ -55,35 +62,37 @@ export default async function Home() {
 
   // Sleep quality indicators with better contrast
   const getSleepQuality = (hours: number) => {
-    if (hours >= 8) return {
-      label: "Excellent",
-      color: "text-green-300",
-      bg: "bg-green-900/40",
-      border: "border-green-600/50"
-    };
-    if (hours >= 7) return {
-      label: "Good",
-      color: "text-teal-300",
-      bg: "bg-teal-900/40",
-      border: "border-teal-600/50"
-    };
-    if (hours >= 6) return {
-      label: "Fair",
-      color: "text-yellow-300",
-      bg: "bg-yellow-900/40",
-      border: "border-yellow-600/50"
-    };
+    if (hours >= 8)
+      return {
+        label: "Excellent",
+        color: "text-green-300",
+        bg: "bg-green-900/40",
+        border: "border-green-600/50",
+      };
+    if (hours >= 7)
+      return {
+        label: "Good",
+        color: "text-teal-300",
+        bg: "bg-teal-900/40",
+        border: "border-teal-600/50",
+      };
+    if (hours >= 6)
+      return {
+        label: "Fair",
+        color: "text-yellow-300",
+        bg: "bg-yellow-900/40",
+        border: "border-yellow-600/50",
+      };
     return {
       label: "Poor",
       color: "text-red-300",
       bg: "bg-red-900/40",
-      border: "border-red-600/50"
+      border: "border-red-600/50",
     };
   };
 
   const bestQuality = getSleepQuality(bestWorstSleep.bestSleep || 0);
   const worstQuality = getSleepQuality(bestWorstSleep.worstSleep || 0);
-
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-950 text-white pt-20 px-4 sm:px-6 lg:px-8">
@@ -99,7 +108,6 @@ export default async function Home() {
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-purple-400 to-teal-400 mb-2">
             Sleep Monitor&apos;s Dashboard
-
           </h1>
           <p className="text-gray-300 max-w-2xl mx-auto text-lg">
             Monitor your sleep patterns, track your progress, and improve your sleep quality
@@ -113,7 +121,7 @@ export default async function Home() {
             <div className="relative mb-4">
               <Image
                 src={user.imageUrl}
-                alt={`${user.firstName}&apos;s  profile`}
+                alt={`${user.firstName}'s profile`}
                 className="w-28 h-28 rounded-full object-cover border-4 border-teal-400 shadow-lg hover:shadow-cyan-400/30 transition-all duration-300 hover:scale-105"
               />
               <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center border-2 border-gray-800 shadow-lg">
@@ -183,7 +191,9 @@ export default async function Home() {
                 <span className="mr-2">👍</span> Best Sleep
               </h4>
               <p className="text-3xl font-bold text-white">{bestWorstSleep.bestSleep || 0} hrs</p>
-              <span className={`text-xs px-2 py-1 rounded-full ${bestQuality.bg} ${bestQuality.color} border ${bestQuality.border} mt-2 inline-block`}>
+              <span
+                className={`text-xs px-2 py-1 rounded-full ${bestQuality.bg} ${bestQuality.color} border ${bestQuality.border} mt-2 inline-block`}
+              >
                 {bestQuality.label}
               </span>
             </div>
@@ -194,7 +204,9 @@ export default async function Home() {
                 <span className="mr-2">👎</span> Worst Sleep
               </h4>
               <p className="text-3xl font-bold text-white">{bestWorstSleep.worstSleep || 0} hrs</p>
-              <span className={`text-xs px-2 py-1 rounded-full ${worstQuality.bg} ${worstQuality.color} border ${worstQuality.border} mt-2 inline-block`}>
+              <span
+                className={`text-xs px-2 py-1 rounded-full ${worstQuality.bg} ${worstQuality.color} border ${worstQuality.border} mt-2 inline-block`}
+              >
                 {worstQuality.label}
               </span>
             </div>
@@ -236,7 +248,10 @@ export default async function Home() {
               { title: "Limit Blue Light", text: "Avoid screens for at least an hour before bedtime.", icon: "📵" },
               { title: "Comfortable Temperature", text: "Keep your bedroom slightly cool (~65°F/18°C).", icon: "🌡️" },
             ].map((tip) => (
-              <div key={tip.title} className="bg-gray-700/50 p-4 rounded-xl border border-gray-600/50 hover:border-cyan-500/50 hover:scale-[1.02] transition-all duration-300 group">
+              <div
+                key={tip.title}
+                className="bg-gray-700/50 p-4 rounded-xl border border-gray-600/50 hover:border-cyan-500/50 hover:scale-[1.02] transition-all duration-300 group"
+              >
                 <div className="flex items-center mb-2">
                   <span className="text-xl mr-2">{tip.icon}</span>
                   <h4 className="font-semibold text-cyan-400">{tip.title}</h4>
