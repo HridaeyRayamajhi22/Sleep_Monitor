@@ -55,10 +55,11 @@ export default async function Home() {
   
   // Stats array
   const stats: Stat[] = [
-    { label: "Avg. Sleep", value: `${statsData.avgSleep}h`, icon: "🛌", color: "cyan" },
-    { label: "Records", value: statsData.totalRecords, icon: "📊", color: "purple" },
-    { label: "Consistency", value: `${statsData.consistency}%`, icon: "⭐", color: "teal" },
-  ];
+  { label: "Avg. Sleep", value: `${statsData?.avgSleep ?? 0}h`, icon: "🛌", color: "cyan" },
+  { label: "Records", value: statsData?.totalRecords ?? 0, icon: "📊", color: "purple" },
+  { label: "Consistency", value: `${statsData?.consistency ?? 0}%`, icon: "⭐", color: "teal" },
+];
+
 
   // Sleep quality indicators with better contrast
   const getSleepQuality = (hours: number) => {
