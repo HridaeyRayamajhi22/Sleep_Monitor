@@ -123,6 +123,8 @@ export default async function Home() {
               <Image
                 src={user.imageUrl}
                 alt={`${user.firstName}'s profile`}
+                width={112}
+                height={112}
                 className="w-28 h-28 rounded-full object-cover border-4 border-teal-400 shadow-lg hover:shadow-cyan-400/30 transition-all duration-300 hover:scale-105"
               />
               <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center border-2 border-gray-800 shadow-lg">
