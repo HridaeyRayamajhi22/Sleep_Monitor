@@ -108,7 +108,11 @@ const BarChart = ({ records }: { records: Record[] }) => {
         },
         grid: {
           color: 'rgba(74, 85, 104, 0.3)',
-          drawBorder: false,
+          drawOnChartArea: true,
+          drawTicks: false,
+        },
+        border: {
+          display: false,
         },
       },
       y: {
@@ -128,7 +132,11 @@ const BarChart = ({ records }: { records: Record[] }) => {
         },
         grid: {
           color: 'rgba(74, 85, 104, 0.3)',
-          drawBorder: false,
+          drawOnChartArea: true,
+          drawTicks: false,
+        },
+        border: {
+          display: false,
         },
       },
     },
